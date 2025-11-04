@@ -1,0 +1,225 @@
+Signal Intelligence Backbone - Complete File Structure
+======================================================
+
+PROJECT ROOT
+├── pyproject.toml                 [Dependencies & metadata]
+├── .env.example                   [Environment variables template]
+├── .gitignore                     [Git ignore patterns]
+│
+├── DOCUMENTATION
+├── README.md                      [Complete reference guide (1000+ lines)]
+├── QUICKSTART.md                  [5-minute setup guide]
+├── API_REFERENCE.md               [Detailed endpoint documentation]
+├── DEVELOPMENT.md                 [Development guide for contributors]
+├── PROJECT_SUMMARY.md             [Project overview & metrics]
+├── FILE_STRUCTURE.txt             [This file]
+│
+├── APP BACKEND
+├── app/
+│   ├── __init__.py               [Package marker]
+│   ├── main.py                   [FastAPI application entry point]
+│   ├── config.py                 [Configuration constants]
+│   ├── database.py               [SQLAlchemy setup & session management]
+│   │
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── signal.py             [Pydantic + SQLAlchemy models]
+│   │       ├── Pydantic:
+│   │       │   ├── SignalEventRequest     [API input schema]
+│   │       │   ├── SignalEventResponse    [API output schema]
+│   │       │   ├── DriftMetric           [Drift response]
+│   │       │   └── CoherenceScore        [Coherence response]
+│   │       │
+│   │       └── SQLAlchemy:
+│   │           ├── Base               [Declarative base]
+│   │           ├── SignalEvent        [Signal storage]
+│   │           ├── AnomalyRecord      [Anomaly storage]
+│   │           └── DriftBaseline      [Baseline tracking]
+│   │
+│   ├── services/                 [Business logic layer]
+│   │   ├── __init__.py
+│   │   ├── signal_service.py     [Signal storage & retrieval]
+│   │   │   ├── store_signal()
+│   │   │   ├── get_recent_signals()
+│   │   │   ├── calculate_coherence_score()
+│   │   │   └── get_all_agents_summary()
+│   │   │
+│   │   ├── drift_detection.py    [Anomaly detection engine]
+│   │   │   ├── calculate_baseline()
+│   │   │   ├── detect_drift()
+│   │   │   ├── record_anomaly()
+│   │   │   ├── get_recent_anomalies()
+│   │   │   └── calculate_drift_trend()
+│   │   │
+│   │   └── kafka_service.py      [Event streaming]
+│   │       ├── KafkaSignalProducer
+│   │       └── KafkaSignalConsumer
+│   │
+│   └── routes/                   [API endpoints]
+│       ├── __init__.py
+│       └── signals.py            [Signal endpoints]
+│           ├── POST /signals/ingest          [Ingest signal]
+│           ├── GET /signals/recent           [Query signals]
+│           ├── GET /signals/agents           [List agents]
+│           ├── GET /signals/drift/{agent}    [Drift status]
+│           ├── GET /signals/drift/{agent}/trend [Trend]
+│           ├── GET /signals/coherence/{agent} [Coherence]
+│           ├── GET /signals/summary          [All agents]
+│           └── GET /signals/anomalies        [Anomalies]
+│
+├── DASHBOARD
+├── dashboard.py                  [Streamlit visualization UI]
+│   ├── Metrics display
+│   ├── Time-series plots
+│   ├── Drift status indicators
+│   ├── Coherence score gauges
+│   ├── Anomaly table
+│   └── Control sidebar
+│
+├── SCRIPTS
+├── scripts/
+│   ├── __init__.py
+│   ├── generate_synthetic_data.py [Synthetic signal generator]
+│   │   ├── generate_hrv()
+│   │   ├── generate_gsr()
+│   │   ├── calculate_signal_strength()
+│   │   ├── generate_signal_event()
+│   │   ├── generate_signal_stream()
+│   │   └── send_signals_to_api()
+│   │
+│   └── kafka_stream_simulator.py [Kafka streaming simulator]
+│       └── Continuous signal producer
+│
+├── TESTING
+├── tests/
+│   ├── __init__.py
+│   ├── test_drift_detection.py   [Drift detection tests]
+│   │   ├── TestDriftDetection
+│   │   │   ├── test_baseline_calculation()
+│   │   │   ├── test_baseline_insufficient_data()
+│   │   │   ├── test_drift_detection_*()
+│   │   │   ├── test_anomaly_recording()
+│   │   │   ├── test_recent_anomalies_retrieval()
+│   │   │   ├── test_drift_trend_calculation()
+│   │   │   └── test_no_anomalies_trend()
+│   │
+│   └── test_api.py              [API endpoint tests]
+│       ├── test_health_check()
+│       ├── test_root_endpoint()
+│       ├── test_ingest_*()
+│       ├── test_list_agents()
+│       ├── test_get_recent_signals()
+│       ├── test_get_drift_*()
+│       ├── test_get_coherence_score()
+│       ├── test_get_summary()
+│       └── test_get_anomalies()
+│
+└── DATA
+    └── signals.db               [SQLite database (auto-created)]
+        └── Tables:
+            ├── signal_events
+            ├── anomalies
+            └── drift_baselines
+
+FILE STATISTICS
+===============
+Total Files: 26
+- Python files: 18 (app, scripts, tests)
+- Documentation: 5 (README, QUICKSTART, API_REFERENCE, DEVELOPMENT, PROJECT_SUMMARY)
+- Configuration: 3 (pyproject.toml, .env.example, .gitignore)
+
+Code Size:
+- Backend: ~1,500 lines (app/)
+- Tests: ~400 lines
+- Dashboard: ~450 lines
+- Scripts: ~350 lines
+- Documentation: ~3,000 lines
+
+KEY FILES BY PURPOSE
+====================
+
+GETTING STARTED:
+1. Start here → README.md
+2. Quick setup → QUICKSTART.md
+3. Try API → API_REFERENCE.md
+
+BACKEND DEVELOPMENT:
+1. Entry point → app/main.py
+2. Models → app/models/signal.py
+3. Logic → app/services/*.py
+4. Endpoints → app/routes/signals.py
+
+TESTING:
+1. Run tests → poetry run pytest
+2. Tests → tests/test_*.py
+
+DEPLOYMENT:
+1. Configuration → app/config.py
+2. Database → app/database.py
+3. Production guide → README.md (Deployment section)
+
+MONITORING:
+1. Real-time → dashboard.py
+2. Health check → http://localhost:8000/health
+3. API docs → http://localhost:8000/docs
+
+DATABASE SCHEMA
+===============
+
+signal_events:
+  id (PK), agent, user_state, signal_strength, timestamp, 
+  biometric_data (JSON), created_at
+
+anomalies:
+  id (PK), agent, signal_event_id, variance_percent, severity, 
+  baseline_value, detected_at
+
+drift_baselines:
+  id (PK), agent (UK), baseline_value, last_updated, signal_count
+
+DEPENDENCIES
+============
+See pyproject.toml for complete list:
+- fastapi (0.104+)
+- uvicorn
+- sqlalchemy (2.0+)
+- pydantic (2.5+)
+- pandas
+- scikit-learn
+- streamlit (1.28+)
+- plotly
+- kafka-python
+- python-dotenv
++ dev: pytest, black, flake8, mypy
+
+ENVIRONMENT SETUP
+=================
+.env file should contain:
+  DATABASE_URL=sqlite:///./signals.db
+  FASTAPI_ENV=development
+  KAFKA_BROKER=localhost:9092
+  KAFKA_TOPIC=signals
+
+COMMON COMMANDS
+===============
+poetry install              Install dependencies
+poetry run uvicorn ...      Start API
+poetry run streamlit ...    Start dashboard
+poetry run pytest           Run tests
+poetry run python scripts/generate_synthetic_data.py --send
+                           Generate test data
+
+README QUICK LINKS
+==================
+Architecture Overview      → README.md (Architecture section)
+API Endpoints             → API_REFERENCE.md
+Setup Instructions        → QUICKSTART.md
+Development Guide         → DEVELOPMENT.md
+Project Metrics           → PROJECT_SUMMARY.md
+Troubleshooting          → README.md (Troubleshooting section)
+Production Deployment     → README.md (Production Deployment)
+
+Created: 2025-10-31
+Updated: 2025-10-31
+Version: 0.1.0
+Status: ✅ Complete
